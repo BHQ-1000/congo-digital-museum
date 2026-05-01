@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Congo History Museum Walk — Final Premium Version</title>
+  <style>
+    :root {
+      --gold: #d8b15f;
+      --gold-light: #fff2bd;
+      --gold-soft: rgba(216, 177, 95, 0.16);
+      --ink: #030712;
+      --navy: #0b1120;
+      --wall: #111827;
+      --glass: rgba(255, 255, 255, 0.078);
+      --glass-strong: rgba(255, 255, 255, 0.135);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --dim: #94a3b8;
+      --line: rgba(216, 177, 95, 0.42);
+      --shadow: rgba(0, 0, 0, 0.62);
+      --blue: #3b82f6;
+      --red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--ink);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 18%), rgba(216,177,95,0.11), transparent 25%),
+        radial-gradient(circle at 50% 12%, rgba(216,177,95,0.15), transparent 30%),
+        radial-gradient(circle at 12% 55%, rgba(59,130,246,0.08), transparent 34%),
+        radial-gradient(circle at 86% 44%, rgba(239,68,68,0.06), transparent 34%),
+        linear-gradient(90deg, rgba(0,0,0,0.9), transparent 26%, transparent 74%, rgba(0,0,0,0.9)),
+        linear-gradient(180deg, rgba(8,13,22,0.16), rgba(2,6,12,0.97));
+      z-index: 2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 25;
+      pointer-events: none;
+      opacity: 0.075;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.62'/%3E%3C/svg%3E");
+    }
+
+    .museum {
+      position: fixed;
+      inset: 0;
+      height: 100vh;
+      perspective: 1150px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, #05070c 0%, #101827 18%, #202a3a 50%, #101827 82%, #05070c 100%);
+      z-index: 0;
+      transform-style: preserve-3d;
+      filter: saturate(var(--museum-sat, 1)) brightness(var(--museum-bright, 1));
+    }
+
+    .museum::before,
+    .museum::after {
+      content: "";
+      position: absolute;
+      top: -8vh;
+      bottom: -8vh;
+      width: 36vw;
+      opacity: 0.42;
+      background:
+        repeating-linear-gradient(to bottom, rgba(216,177,95,0.075) 0 2px, transparent 2px 128px),
+        linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.23));
+    }
+
+    .museum::before {
+      left: -11vw;
+      transform: rotateY(42deg);
+      transform-origin: right center;
+    }
+
+    .museum::after {
+      right: -11vw;
+      transform: rotateY(-42deg);
+      transform-origin: left center;
+    }
+
+    .ceiling-lights {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: min(38vw, 540px);
+      height: 120%;
+      transform: translateX(-50%);
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,var(--light-intensity, 0.38)) 0 2px,
+          rgba(255,255,255,0.075) 2px 8px,
+          transparent 8px 152px
+        );
+      opacity: 0.15;
+      filter: blur(0.35px);
+      background-position-y: var(--light-y, 0px);
+    }
+
+    .floor {
+      position: absolute;
+      left: -16vw;
+      right: -16vw;
+      bottom: -22vh;
+      height: 57vh;
+      transform: rotateX(64deg) translateZ(-12px);
+      transform-origin: bottom center;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.76), transparent 31%, transparent 69%, rgba(0,0,0,0.76)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.055) 0 2px, transparent 2px 120px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0 2px, transparent 2px 100px),
+        linear-gradient(180deg, #1f2937, #030712);
+      background-position: var(--floor-x, 0px) var(--floor-y, 0px);
+      box-shadow: inset 0 44px 130px rgba(0,0,0,0.78);
+    }
+
+    .back-glow {
+      position: absolute;
+      inset: auto 0 13vh 0;
+      margin: auto;
+      width: 48vw;
+      height: 44vh;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(216,177,95,var(--glow-alpha, 0.24)), transparent 68%);
+      filter: blur(38px);
+      transform: translateY(var(--glow-y, 0px));
+    }
+
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255,242,189,0.52);
+      box-shadow: 0 0 16px rgba(216,177,95,0.6);
+      opacity: var(--o, 0.35);
+      transform: translate3d(var(--x, 0px), var(--y, 0px), 0) scale(var(--s, 1));
+      animation: drift var(--d, 10s) ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      from { translate: 0 0; }
+      to { translate: 26px -34px; }
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #facc15, #d8b15f, #3b82f6, #ef4444);
+      z-index: 60;
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.86);
+    }
+
+    .hud {
+      position: fixed;
+      top: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      gap: 0.45rem;
+      max-width: calc(100vw - 1.4rem);
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0.55rem;
+      border: 1px solid rgba(216,177,95,0.28);
+      border-radius: 999px;
+      background: rgba(2,6,23,0.58);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.38);
+    }
+
+    .hud::-webkit-scrollbar { display: none; }
+
+    .hud button {
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255,255,255,0.72);
+      padding: 0.52rem 0.72rem;
+      white-space: nowrap;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 850;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .hud button:hover,
+    .hud button.active {
+      color: #fff7cc;
+      border-color: rgba(216,177,95,0.48);
+      background: rgba(216,177,95,0.13);
+      box-shadow: 0 0 20px rgba(216,177,95,0.14);
+    }
+
+    .sound-toggle,
+    .map-toggle {
+      position: fixed;
+      z-index: 55;
+      border: 1px solid rgba(216,177,95,0.45);
+      background: rgba(2,6,23,0.72);
+      color: #fde68a;
+      border-radius: 999px;
+      padding: 0.8rem 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+    }
+
+    .sound-toggle { right: 1rem; bottom: 1rem; }
+    .map-toggle { left: 1rem; bottom: 1rem; }
+
+    .sound-toggle:hover,
+    .map-toggle:hover { background: rgba(216,177,95,0.13); }
+
+    .hero {
+      position: relative;
+      min-height: 106vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8rem 1.4rem;
+      z-index: 10;
+    }
+
+    .hero-inner {
+      max-width: 1060px;
+      transform: translateY(var(--hero-y, 0px)) scale(var(--hero-scale, 1));
+      opacity: var(--hero-opacity, 1);
+      transition: opacity 0.1s linear;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.55rem 1rem;
+      border: 1px solid rgba(216,177,95,0.45);
+      border-radius: 999px;
+      color: #fde68a;
+      background: rgba(216,177,95,0.08);
+      backdrop-filter: blur(12px);
+      margin-bottom: 1.4rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3.2rem, 9vw, 8.8rem);
+      line-height: 0.88;
+      letter-spacing: -0.08em;
+      text-shadow: 0 30px 80px rgba(0,0,0,0.88);
+    }
+
+    .hero p {
+      max-width: 805px;
+      margin: 1.35rem auto 0;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 2vw, 1.35rem);
+      line-height: 1.75;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      gap: 0.75rem;
+      justify-items: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .mouse {
+      width: 28px;
+      height: 46px;
+      border: 1.5px solid rgba(255,255,255,0.65);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .mouse::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 4px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--gold);
+      transform: translateX(-50%);
+      animation: wheel 1.4s ease-in-out infinite;
+    }
+
+    @keyframes wheel {
+      0% { opacity: 0; transform: translate(-50%, 0); }
+      35% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, 18px); }
+    }
+
+    .timeline {
+      position: relative;
+      z-index: 10;
+      padding-bottom: 20vh;
+    }
+
+    .section-cinema {
+      position: absolute;
+      top: 7vh;
+      left: 50%;
+      width: min(820px, 92vw);
+      height: 360px;
+      transform: translateX(-50%) translateY(36px) scale(0.98);
+      z-index: 12;
+      pointer-events: none;
+      opacity: 0;
+      filter: blur(10px);
+      transition: opacity 0.75s ease, transform 0.95s cubic-bezier(.18,.85,.2,1), filter 0.75s ease;
+    }
+
+    .era.visible .section-cinema {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateX(-50%) translateY(0) scale(1);
+      animation: cinemaFade 8s ease forwards;
+    }
+
+    @keyframes cinemaFade {
+      0% { opacity: 0; filter: blur(2px); transform: translateX(-50%) translateY(24px) scale(0.99); }
+      10% { opacity: 1; filter: blur(0); transform: translateX(-50%) translateY(0) scale(1); }
+      90% { opacity: 1; filter: blur(0); }
+      100% { opacity: 0; filter: blur(2px); transform: translateX(-50%) translateY(-12px) scale(1.006); }
+    }
+
+    .cinema-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 38px;
+      background:
+        radial-gradient(circle at 38% 52%, rgba(216,177,95,0.2), transparent 36%),
+        radial-gradient(circle at 50% 88%, rgba(216,177,95,0.24), transparent 28%),
+        linear-gradient(90deg, transparent, rgba(2,6,23,0.56), transparent);
+      mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    }
+
+    .cinema-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), transparent 35%, rgba(0,0,0,0.62)),
+        radial-gradient(ellipse at 36% 80%, rgba(216,177,95,0.28), transparent 34%);
+      opacity: 0.95;
+      z-index: 1;
+    }
+
+    .cinema-asset-wrap,
+    .cinema-asset-fallback {
+      position: absolute;
+      left: clamp(0.6rem, 6vw, 4rem);
+      bottom: 0;
+      height: 96%;
+      width: min(460px, 58vw);
+      z-index: 3;
+      opacity: 0;
+      transform-origin: bottom center;
+      animation: assetReveal 7.8s ease forwards;
+    }
+
+    .cinema-asset {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom left;
+      display: block;
+      transform-origin: bottom center;
+      filter:
+        contrast(1.08)
+        saturate(1.05)
+        drop-shadow(0 0 24px rgba(216,177,95,0.36))
+        drop-shadow(0 28px 55px rgba(0,0,0,0.75));
+    }
+
+    .cinema-asset-fallback {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: rgba(255,242,189,0.86);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.1rem, 5vw, 4.8rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+      text-shadow: 0 0 28px rgba(216,177,95,0.45), 0 20px 60px rgba(0,0,0,0.9);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 40% 50%, rgba(216,177,95,0.22), transparent 42%),
+        linear-gradient(135deg, rgba(2,6,23,0.22), rgba(2,6,23,0.02));
+      filter: drop-shadow(0 0 24px rgba(216,177,95,0.22));
+    }
+
+    .scene-river-art { color: #bfdbfe; text-shadow: 0 0 30px rgba(37,99,235,0.75), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-stamp-art { color: #fca5a5; text-shadow: 0 0 30px rgba(239,68,68,0.75), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-mine-art { color: #fdba74; text-shadow: 0 0 30px rgba(251,146,60,0.62), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-flag-art { color: #fde68a; text-shadow: 0 0 26px rgba(59,130,246,0.5), 0 0 36px rgba(239,68,68,0.38); }
+    .scene-lumumba-art { color: #fff2bd; }
+    .scene-mobutu-art { color: #d8b15f; }
+    .scene-rumba-art { color: #e9d5ff; text-shadow: 0 0 32px rgba(168,85,247,0.72), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-war-art { color: #fca5a5; text-shadow: 0 0 32px rgba(239,68,68,0.75), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-minerals-art { color: #bfdbfe; text-shadow: 0 0 32px rgba(37,99,235,0.85), 0 20px 60px rgba(0,0,0,0.9); }
+    .scene-today-art { color: #dbeafe; text-shadow: 0 0 28px rgba(96,165,250,0.65), 0 20px 60px rgba(0,0,0,0.9); }
+
+    @keyframes assetReveal {
+      0% { opacity: 0; transform: translateY(16px) scale(0.99); filter: blur(1.5px) contrast(1.06) saturate(1.05) drop-shadow(0 0 18px rgba(216,177,95,0.28)); }
+      10% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0) contrast(1.08) saturate(1.05) drop-shadow(0 0 24px rgba(216,177,95,0.36)); }
+      90% { opacity: 1; filter: blur(0) contrast(1.08) saturate(1.05) drop-shadow(0 0 24px rgba(216,177,95,0.36)); }
+      100% { opacity: 0; transform: translateY(-10px) scale(1.006); filter: blur(1.5px) contrast(1.08) saturate(1.05) drop-shadow(0 0 18px rgba(216,177,95,0.26)); }
+    }
+
+    .cinema-title {
+      position: absolute;
+      right: clamp(1rem, 8vw, 5rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      text-align: right;
+      color: var(--gold-light);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.65rem, 4vw, 3.9rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      text-shadow: 0 0 26px rgba(216,177,95,0.36), 0 16px 40px rgba(0,0,0,0.8);
+      opacity: 0;
+      animation: titleReveal 7.8s ease forwards;
+    }
+
+    .cinema-title small {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 0.36em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,242,189,0.74);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    @keyframes titleReveal {
+      0%, 8% { opacity: 0; transform: translateY(-45%) translateX(18px); }
+      20%, 84% { opacity: 1; transform: translateY(-50%) translateX(0); }
+      100% { opacity: 0; transform: translateY(-54%) translateX(-8px); }
+    }
+
+    .scene-river .cinema-asset { animation: riverFloat 3.2s ease-in-out infinite; }
+    .scene-stamp .cinema-asset { animation: stampMotion 3.4s ease-in-out infinite; }
+    .scene-mine .cinema-asset { animation: minerMotion 3.6s ease-in-out infinite; }
+    .scene-flag .cinema-asset { animation: flagMotion 3.4s ease-in-out infinite; }
+    .scene-lumumba .cinema-asset { animation: speechMotion 3.7s ease-in-out infinite; }
+    .scene-mobutu .cinema-asset { animation: hatMotion 3.3s ease-in-out infinite; }
+    .scene-rumba .cinema-asset { animation: guitarMotion 3.1s ease-in-out infinite; }
+    .scene-war .cinema-asset { animation: fractureMotion 3.7s ease-in-out infinite; }
+    .scene-minerals .cinema-asset { animation: crystalMotion 3.2s ease-in-out infinite; }
+    .scene-today .cinema-asset { animation: skylineMotion 3.7s ease-in-out infinite; }
+
+    @keyframes riverFloat { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(10px,-6px,0) scale(1.012); } }
+    @keyframes stampMotion { 0%,100% { transform: translate3d(0,0,0) rotate(0deg); } 48%,58% { transform: translate3d(0,8px,0) rotate(-3.5deg); } }
+    @keyframes minerMotion { 0%,100% { transform: translate3d(0,0,0) rotate(-1deg); } 50% { transform: translate3d(0,-7px,0) rotate(2deg); } }
+    @keyframes flagMotion { 0%,100% { transform: translate3d(0,0,0) skewX(0deg); } 50% { transform: translate3d(12px,-7px,0) skewX(-2deg); } }
+    @keyframes speechMotion { 0%,100% { transform: translate3d(0,0,0) rotate(0deg); } 45%,62% { transform: translate3d(0,-6px,0) rotate(-2deg); } }
+    @keyframes hatMotion { 0%,100% { transform: translate3d(0,0,0) rotate(0deg); } 45%,60% { transform: translate3d(0,-5px,0) rotate(-3deg); } }
+    @keyframes guitarMotion { 0%,100% { transform: translate3d(0,0,0) rotate(-1deg); } 38% { transform: translate3d(3px,-3px,0) rotate(2deg); } 58% { transform: translate3d(-3px,2px,0) rotate(-2deg); } }
+    @keyframes fractureMotion { 0%,100% { transform: translate3d(0,0,0) scale(1); } 52% { transform: translate3d(-5px,-5px,0) scale(1.015); } }
+    @keyframes crystalMotion { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(0,-8px,0) scale(1.045); } }
+    @keyframes skylineMotion { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(0,-9px,0) scale(1.012); } }
+
+    .era {
+      min-height: 128vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10vh 6vw;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .era::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--line), transparent);
+      opacity: 0.64;
+    }
+
+    .exhibit {
+      width: min(94vw, 1180px);
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: clamp(1rem, 4vw, 4rem);
+      align-items: center;
+      transform-style: preserve-3d;
+      opacity: 0;
+      transform: translateY(105px) translateZ(-120px) rotateX(8deg);
+      transition: opacity 0.85s ease, transform 1s cubic-bezier(.18,.85,.2,1), filter 0.5s ease;
+      filter: blur(2px) saturate(0.82);
+    }
+
+    .era.visible .exhibit {
+      opacity: 1;
+      transform: translateY(0) translateZ(0) rotateX(0deg);
+      filter: blur(0) saturate(1);
+    }
+
+    .era:nth-child(even) .exhibit { grid-template-columns: 1.08fr 0.92fr; }
+    .era:nth-child(even) .artifact-wrap { order: 2; }
+
+    .artifact-wrap { perspective: 900px; }
+
+    .artifact {
+      position: relative;
+      min-height: 440px;
+      border: 1px solid rgba(216,177,95,0.34);
+      border-radius: 32px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.035)),
+        radial-gradient(circle at 50% 8%, rgba(216,177,95,0.28), transparent 54%),
+        linear-gradient(180deg, rgba(15,23,42,0.88), rgba(2,6,23,0.72));
+      box-shadow: 0 36px 95px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.2);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      transform-style: preserve-3d;
+      transform: rotateY(var(--spin, 0deg)) rotateX(var(--tilt, 0deg)) translateY(var(--float, 0px)) scale(var(--active-scale, 1));
+      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+      cursor: pointer;
+    }
+
+    .era.visible .artifact {
+      --active-scale: 1.015;
+      border-color: rgba(255,242,189,0.42);
+      box-shadow: 0 46px 125px rgba(0,0,0,0.75), 0 0 55px rgba(216,177,95,0.19), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .artifact:hover {
+      border-color: rgba(255,242,189,0.6);
+      box-shadow: 0 52px 140px rgba(0,0,0,0.78), 0 0 70px rgba(216,177,95,0.25), inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    .artifact::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 24px;
+      transform: translateZ(30px);
+    }
+
+    .artifact::after {
+      content: "";
+      position: absolute;
+      inset: -32%;
+      background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.16), transparent 58%);
+      transform: translateX(var(--shine, -55%)) rotate(6deg);
+      transition: transform 0.2s ease;
+    }
+
+    .artifact-symbol {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(4.8rem, 11vw, 9.6rem);
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 0 35px rgba(216,177,95,0.44);
+      z-index: 1;
+      transform: translateZ(70px) rotateZ(var(--symbol-spin, 0deg));
+    }
+
+    .artifact-label {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 26px;
+      z-index: 2;
+      padding: 1rem 1.1rem;
+      border-radius: 18px;
+      background: rgba(2,6,23,0.74);
+      border: 1px solid rgba(255,255,255,0.11);
+      color: #fde68a;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 900;
+      transform: translateZ(90px);
+    }
+
+    .plaque {
+      position: relative;
+      padding: clamp(1.25rem, 4vw, 2.2rem);
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(2,6,23,0.6);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+      backdrop-filter: blur(20px);
+      transform: translateY(var(--plaque-y, 0px));
+    }
+
+    .date {
+      display: inline-block;
+      color: #fde68a;
+      font-weight: 900;
+      font-size: 0.92rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .plaque h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 4.25rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .plaque p {
+      color: var(--muted);
+      font-size: clamp(1rem, 1.55vw, 1.18rem);
+      line-height: 1.72;
+      margin-bottom: 1rem;
+    }
+
+    .plaque strong { color: #fff7cc; font-weight: 850; }
+
+    .clip {
+      margin-top: 1.3rem;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(216,177,95,0.25);
+      background: rgba(15,23,42,0.86);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 48px rgba(0,0,0,0.28);
+      cursor: pointer;
+      transform: translateZ(0);
+    }
+
+    .clip-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 1rem;
+      color: #fde68a;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .clip-screen {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(216,177,95,0.24), transparent 38%),
+        linear-gradient(135deg, rgba(59,130,246,0.18), rgba(239,68,68,0.14)),
+        #020617;
+    }
+
+    .clip-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.05) 50%, rgba(0,0,0,0.08) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.04), rgba(0,255,0,0.02), rgba(0,0,255,0.04));
+      background-size: 100% 4px, 5px 100%;
+      z-index: -1;
+      opacity: 0.55;
+    }
+
+    .clip-screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.12), transparent);
+      transform: translateX(var(--clip-shine, -100%));
+    }
+
+    .era.visible .clip-screen {
+      animation: screenWake 1.3s ease both;
+    }
+
+    @keyframes screenWake {
+      0% { filter: brightness(0.65) saturate(0.75); }
+      42% { filter: brightness(1.35) saturate(1.25); }
+      100% { filter: brightness(1) saturate(1); }
+    }
+
+    .youtube-panel {
+      background-size: cover;
+      background-position: center;
+      background-image:
+        linear-gradient(rgba(2,6,23,0.18), rgba(2,6,23,0.7)),
+        var(--thumb);
+    }
+
+    .youtube-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(2,6,23,0.18), rgba(2,6,23,0.72)),
+        var(--thumb);
+      background-size: cover;
+      background-position: center;
+      z-index: -2;
+    }
+
+    .yt-fallback {
+      position: absolute;
+      right: 0.85rem;
+      bottom: 0.85rem;
+      z-index: 4;
+      color: #fff7cc;
+      background: rgba(2,6,23,0.78);
+      border: 1px solid rgba(216,177,95,0.34);
+      border-radius: 999px;
+      padding: 0.5rem 0.72rem;
+      font-size: 0.76rem;
+      font-weight: 900;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .play-orb {
+      width: 78px;
+      height: 78px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+      color: #fff7cc;
+      font-size: 1.6rem;
+      box-shadow: 0 0 45px rgba(216,177,95,0.3);
+      backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .clip:hover .play-orb {
+      transform: scale(1.08);
+      box-shadow: 0 0 65px rgba(216,177,95,0.45);
+    }
+
+    .clip-caption {
+      padding: 0.9rem 1rem 1rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .micro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1.35rem;
+    }
+
+    .micro span {
+      padding: 0.52rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(216,177,95,0.1);
+      border: 1px solid rgba(216,177,95,0.22);
+      color: #fef3c7;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .divider-room {
+      position: relative;
+      z-index: 10;
+      min-height: 76vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 4rem 1.4rem;
+    }
+
+    .divider-room h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.3rem, 6vw, 6rem);
+      letter-spacing: -0.06em;
+      line-height: 0.92;
+      max-width: 950px;
+    }
+
+    .divider-room p {
+      margin-top: 1rem;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 1.08rem;
+    }
+
+    .finale {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8rem 1.4rem;
+    }
+
+    .finale-card {
+      width: min(920px, 94vw);
+      padding: clamp(1.5rem, 5vw, 4rem);
+      border-radius: 34px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(216,177,95,0.34);
+      box-shadow: 0 40px 110px rgba(0,0,0,0.7);
+      backdrop-filter: blur(20px);
+    }
+
+    .finale h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.5rem, 7vw, 6.8rem);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+      margin-bottom: 1rem;
+    }
+
+    .finale p {
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.8;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .focus-overlay,
+    .map-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(18px);
+    }
+
+    .focus-overlay.open,
+    .map-overlay.open { display: flex; }
+
+    .focus-card,
+    .map-card {
+      width: min(1050px, 96vw);
+      max-height: 88vh;
+      overflow: auto;
+      border-radius: 34px;
+      border: 1px solid rgba(216,177,95,0.45);
+      background:
+        radial-gradient(circle at top, rgba(216,177,95,0.13), transparent 45%),
+        rgba(2,6,23,0.95);
+      box-shadow: 0 50px 140px rgba(0,0,0,0.92);
+      padding: clamp(1.4rem, 4vw, 3rem);
+      animation: focusIn 0.34s ease both;
+    }
+
+    @keyframes focusIn {
+      from { opacity: 0; transform: scale(0.94) translateY(26px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .focus-top,
+    .map-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .focus-card h2,
+    .map-card h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.1rem, 6vw, 5.5rem);
+      letter-spacing: -0.06em;
+      line-height: 0.92;
+    }
+
+    .focus-card p,
+    .map-card p {
+      color: var(--muted);
+      line-height: 1.82;
+      font-size: 1.08rem;
+      margin-top: 1rem;
+    }
+
+    .close-focus,
+    .close-map {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      flex: 0 0 auto;
+    }
+
+    .source-note {
+      margin-top: 1.3rem;
+      padding: 1rem;
+      border-radius: 20px;
+      color: #fde68a;
+      background: rgba(216,177,95,0.08);
+      border: 1px solid rgba(216,177,95,0.2);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .map-visual {
+      margin-top: 1.5rem;
+      position: relative;
+      min-height: 520px;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(216,177,95,0.25);
+      background:
+        radial-gradient(circle at 55% 47%, rgba(216,177,95,0.18), transparent 18%),
+        radial-gradient(circle at 50% 45%, rgba(59,130,246,0.1), transparent 35%),
+        linear-gradient(135deg, rgba(15,23,42,0.9), rgba(2,6,23,0.96));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 28px 90px rgba(0,0,0,0.45);
+    }
+
+    .map-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 78%);
+      opacity: 0.55;
+    }
+
+    .africa-map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      filter: drop-shadow(0 0 28px rgba(216,177,95,0.16));
+    }
+
+    .africa-shape {
+      fill: rgba(2,6,23,0.92);
+      stroke: rgba(216,177,95,0.32);
+      stroke-width: 1.4;
+    }
+
+    .drc-shape {
+      fill: rgba(216,177,95,0.28);
+      stroke: #fde68a;
+      stroke-width: 2.2;
+      filter: drop-shadow(0 0 18px rgba(216,177,95,0.75));
+      animation: drcPulse 2.4s ease-in-out infinite;
+    }
+
+    .map-river {
+      fill: none;
+      stroke: #2563eb;
+      stroke-width: 3.2;
+      stroke-linecap: round;
+      stroke-dasharray: 12 12;
+      filter: drop-shadow(0 0 14px rgba(37,99,235,0.8));
+      animation: riverDash 2.6s linear infinite;
+    }
+
+    .map-route {
+      fill: none;
+      stroke: rgba(216,177,95,0.58);
+      stroke-width: 1.3;
+      stroke-dasharray: 6 8;
+      animation: riverDash 3.2s linear infinite;
+    }
+
+    .map-dot {
+      fill: #fff2bd;
+      stroke: rgba(2,6,23,0.9);
+      stroke-width: 2;
+      filter: drop-shadow(0 0 12px rgba(216,177,95,0.95));
+    }
+
+    .map-dot.blue { fill: #93c5fd; filter: drop-shadow(0 0 14px rgba(59,130,246,0.9)); }
+    .map-dot.red { fill: #fca5a5; filter: drop-shadow(0 0 14px rgba(239,68,68,0.9)); }
+
+    .map-label {
+      position: absolute;
+      z-index: 5;
+      color: #fff7cc;
+      background: rgba(2,6,23,0.76);
+      border: 1px solid rgba(216,177,95,0.26);
+      border-radius: 999px;
+      padding: 0.48rem 0.72rem;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+
+    .map-label::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 38px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(216,177,95,0.8), transparent);
+    }
+
+    .map-label.left::before { left: 100%; }
+    .map-label.right::before { right: 100%; transform: rotate(180deg); }
+
+    .map-title-mark {
+      position: absolute;
+      left: 1.4rem;
+      bottom: 1.25rem;
+      z-index: 4;
+      color: rgba(255,242,189,0.12);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(4rem, 14vw, 10rem);
+      letter-spacing: -0.08em;
+      line-height: 0.8;
+      pointer-events: none;
+    }
+
+    .congo-map-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      z-index: 3;
+      padding: 1rem;
+      filter:
+        contrast(1.04)
+        saturate(1.05)
+        drop-shadow(0 0 30px rgba(216,177,95,0.18));
+    }
+
+    .map-visual.image-map {
+      min-height: 580px;
+      background:
+        radial-gradient(circle at 62% 50%, rgba(216,177,95,0.16), transparent 28%),
+        linear-gradient(135deg, rgba(15,23,42,0.95), rgba(2,6,23,0.98));
+    }
+
+    .map-visual.image-map::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(2,6,23,0.22), transparent 18%, transparent 82%, rgba(2,6,23,0.22)),
+        linear-gradient(180deg, rgba(2,6,23,0.12), transparent 52%, rgba(2,6,23,0.18));
+    }
+
+    @media (max-width: 900px) {
+      .hud {
+        top: auto;
+        bottom: 4.6rem;
+        left: 0.5rem;
+        right: 0.5rem;
+        transform: none;
+      }
+
+      .map-toggle { display: none; }
+      .exhibit,
+      .era:nth-child(even) .exhibit { grid-template-columns: 1fr; }
+      .era:nth-child(even) .artifact-wrap { order: 0; }
+      .artifact { min-height: 290px; }
+      .era { padding: 9vh 1rem; min-height: 125vh; }
+      .era::before { left: 1rem; opacity: 0.35; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .particle, .mouse::after, .era.visible .clip-screen { animation: none; }
+      .exhibit, .artifact, .hero-inner { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <nav class="hud" aria-label="Timeline navigation" id="timelineHud"></nav>
+  <button class="map-toggle" id="mapToggle" type="button">Map</button>
+  <button class="sound-toggle" id="soundToggle" type="button">Ambient: Off</button>
+
+  <div class="museum" aria-hidden="true" id="museum">
+    <div class="ceiling-lights" id="lights"></div>
+    <div class="back-glow" id="backGlow"></div>
+    <div class="floor" id="floor"></div>
+  </div>
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <header class="hero">
+    <div class="hero-inner" id="heroInner">
+      <div class="eyebrow">Premium cinematic museum</div>
+      <h1>Congo<br />History Walk</h1>
+      <p>
+        Scroll through a dark museum corridor. Each exhibit reveals another era in Congo’s history: kingdoms, conquest,
+        independence, Lumumba, Zaire, rumba, war, minerals, and modern Congolese resilience.
+      </p>
+    </div>
+    <div class="scroll-cue">
+      <div class="mouse"></div>
+      <span>Scroll to enter</span>
+    </div>
+  </header>
+
+  <main class="timeline">
+    <section class="era" data-nav="Kingdoms">
+      <div class="section-cinema scene-river" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-kingdoms-river.png" alt="Cinematic illustration of precolonial Congo kingdoms and river landscape"></div>
+          <div class="cinema-title">Kingdoms<br><small>river worlds & royal power</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">K</div><div class="artifact-label">Kingdoms, trade, river worlds</div></div></div>
+        <article class="plaque">
+          <span class="date">Before the 1800s</span>
+          <h2>Before Colonization</h2>
+          <p>Long before European rule, the Congo region contained powerful societies, agricultural communities, trade routes, ironworking traditions, spiritual systems, and political kingdoms. The <strong>Kingdom of Kongo</strong>, centered near the lower Congo River, became one of Central Africa’s most influential historical states.</p>
+          <p>The Congo River was not just water. It was a road, a border, a marketplace, and a cultural artery linking communities across vast landscapes.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Precolonial Congo</span></div><div class="clip-screen youtube-panel" data-youtube="81S6OcMF1vo" data-title="Kingdom of Kongo documentary"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=81S6OcMF1vo" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Kingdom of Kongo</span><span>Congo River</span><span>Regional trade</span><span>Oral history</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Free State">
+      <div class="section-cinema scene-stamp" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-free-state-stamp.png" alt="Cinematic illustration of Congo Free State colonial document and stamp"></div>
+          <div class="cinema-title">Congo Free State<br><small>document, stamp, empire</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">1885</div><div class="artifact-label">The Congo Free State</div></div></div>
+        <article class="plaque">
+          <span class="date">1885–1908</span>
+          <h2>Leopold’s Private Colony</h2>
+          <p>In the late nineteenth century, King Leopold II of Belgium claimed control over the Congo Free State as his personal possession. The land was promoted internationally as a humanitarian and anti-slavery project, but in reality it became a violent extraction system focused on ivory and rubber.</p>
+          <p>Forced labor, hostage-taking, punishment, and terror were used to meet production demands. International outrage eventually forced Belgium to take the territory away from Leopold’s personal control.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Rubber and empire</span></div><div class="clip-screen youtube-panel" data-youtube="EAokwWHJKr0" data-title="King Leopold II and Congo Free State"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=EAokwWHJKr0" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Forced labor</span><span>Rubber extraction</span><span>Human rights campaigns</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider-room"><div><div class="eyebrow">Room II</div><h2>The museum darkens. The state changes names, but power remains unequal.</h2><p>Scroll slowly here. This middle corridor is designed to feel heavier, like entering an archive of colonial administration.</p></div></div>
+
+    <section class="era" data-nav="Belgian Congo">
+      <div class="section-cinema scene-mine" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-belgian-miner.png" alt="Cinematic illustration of Belgian Congo mining scene"></div>
+          <div class="cinema-title">Belgian Congo<br><small>mines, railways & rule</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">1908</div><div class="artifact-label">Belgian Congo</div></div></div>
+        <article class="plaque">
+          <span class="date">1908–1960</span>
+          <h2>Colonial Rule</h2>
+          <p>Belgium annexed the territory in 1908 and renamed it the Belgian Congo. Colonial authorities built railways, mining systems, missions, schools, and administrative structures, but Congolese people were excluded from real political power.</p>
+          <p>Mining became central to the colonial economy, especially in Katanga. Copper, cobalt, diamonds, and uranium connected Congo to global industrial and military systems, while racial hierarchy shaped daily life.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Colonial economy</span></div><div class="clip-screen youtube-panel" data-youtube="CaOcFMiYFzQ" data-title="Congo A Curse of Riches documentary"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=CaOcFMiYFzQ" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Mining</span><span>Katanga</span><span>Mission schools</span><span>Colonial hierarchy</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Independence">
+      <div class="section-cinema scene-flag" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-independence-flag.png" alt="Cinematic illustration of Congo independence flag raising"></div>
+          <div class="cinema-title">Independence<br><small>flag raised, crisis begins</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">1960</div><div class="artifact-label">Independence and crisis</div></div></div>
+        <article class="plaque">
+          <span class="date">June 30, 1960</span>
+          <h2>Independence Arrives</h2>
+          <p>Congo gained independence from Belgium on June 30, 1960. Joseph Kasa-Vubu became president and Patrice Lumumba became the first prime minister. The ceremony itself revealed tension: Belgium framed colonization as a gift, while Lumumba openly named the violence and humiliation of colonial rule.</p>
+          <p>Within days, the new country faced army mutiny, Belgian intervention, Katanga’s secession, and Cold War pressure. Independence arrived, but stability did not.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Lumumba speech</span></div><div class="clip-screen youtube-panel" data-youtube="XZwiR4wbzEs" data-title="Patrice Lumumba independence speech"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=XZwiR4wbzEs" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Patrice Lumumba</span><span>Kasa-Vubu</span><span>Katanga</span><span>Cold War</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Lumumba">
+      <div class="section-cinema scene-lumumba" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-lumumba-podium.png" alt="Cinematic illustration of Patrice Lumumba speaking at a podium"></div>
+          <div class="cinema-title">Lumumba<br><small>raised hand & microphone</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">✦</div><div class="artifact-label">Lumumba and memory</div></div></div>
+        <article class="plaque">
+          <span class="date">1961</span>
+          <h2>The Assassination of Lumumba</h2>
+          <p>Patrice Lumumba was overthrown, imprisoned, transferred to Katanga, and assassinated in January 1961. His death became one of the most symbolic events in African decolonization history.</p>
+          <p>For many Congolese and Pan-African thinkers, Lumumba represents both the promise of true independence and the danger faced by leaders who challenged colonial and foreign interests.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Memory and martyrdom</span></div><div class="clip-screen youtube-panel" data-youtube="5rnpWxZKtps" data-title="Final 24 hours of Patrice Lumumba"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=5rnpWxZKtps" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Decolonization</span><span>Pan-Africanism</span><span>Political memory</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="divider-room"><div><div class="eyebrow">Room III</div><h2>From Congo to Zaire. A new image, a centralized state, and a long shadow.</h2><p>The artifacts rotate more strongly here to make the transition feel like a political rebranding of the entire country.</p></div></div>
+
+    <section class="era" data-nav="Zaire">
+      <div class="section-cinema scene-mobutu" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-mobutu-hat.png" alt="Cinematic illustration of Mobutu adjusting his hat"></div>
+          <div class="cinema-title">Mobutu & Zaire<br><small>the hat adjustment</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">Zaire</div><div class="artifact-label">Mobutu’s state</div></div></div>
+        <article class="plaque">
+          <span class="date">1965–1997</span>
+          <h2>Mobutu and Zaire</h2>
+          <p>Joseph-Désiré Mobutu seized power in 1965 and later renamed the country Zaire. His government promoted <strong>authenticité</strong>, encouraging African names, symbols, clothing, and national identity while concentrating political power under a one-party state.</p>
+          <p>Mobutu’s rule also became associated with authoritarianism, patronage, censorship, corruption, and a state increasingly weakened by debt and unequal resource control.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Zaire era</span></div><div class="clip-screen youtube-panel" data-youtube="lYlhS3Ry3Yc" data-title="Mobutu King of Zaire documentary"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=lYlhS3Ry3Yc" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Authenticité</span><span>One-party rule</span><span>Zaire</span><span>Cold War alliances</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Rumba">
+      <div class="section-cinema scene-rumba" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-rumba-guitarist.png" alt="Cinematic illustration of Congolese rumba guitarist"></div>
+          <div class="cinema-title">Congolese Rumba<br><small>guitar, rhythm & city nights</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">♫</div><div class="artifact-label">Rumba, cities, and culture</div></div></div>
+        <article class="plaque">
+          <span class="date">20th century</span>
+          <h2>Congo’s Cultural Power</h2>
+          <p>Congo’s history is not only political. Congolese rumba became one of Africa’s most influential musical traditions, shaped by Kinshasa and Brazzaville, guitar innovation, dance culture, and transatlantic sounds.</p>
+          <p>Music became a way to celebrate, criticize, remember, and survive. Even during political crisis, Congolese culture traveled across Africa and the world.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Congolese rumba</span></div><div class="clip-screen youtube-panel" data-youtube="_DDZ2YNYJps" data-title="From Leopoldville to Kinshasa rumba documentary"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=_DDZ2YNYJps" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Kinshasa</span><span>Rumba</span><span>Dance</span><span>Urban creativity</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Wars">
+      <div class="section-cinema scene-war" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-wars-fractured-map.png" alt="Cinematic illustration of fractured Congo map during wars"></div>
+          <div class="cinema-title">The Congo Wars<br><small>a map fractures</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">1997</div><div class="artifact-label">War and the return of the DRC name</div></div></div>
+        <article class="plaque">
+          <span class="date">1996–2003</span>
+          <h2>The Congo Wars</h2>
+          <p>The First Congo War helped overthrow Mobutu in 1997. Laurent-Désiré Kabila renamed the country the Democratic Republic of the Congo. Soon after, the Second Congo War erupted, involving several African states and armed groups.</p>
+          <p>The war caused enormous human suffering and displacement. Its effects continue to shape politics, security, and daily life, especially in eastern Congo.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Regional conflict</span></div><div class="clip-screen youtube-panel" data-youtube="3ml2L_bufTc" data-title="Complete history of the Congo Crisis"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=3ml2L_bufTc" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>First Congo War</span><span>Second Congo War</span><span>Eastern Congo</span><span>Displacement</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Minerals">
+      <div class="section-cinema scene-minerals" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-cobalt-crystal.png" alt="Cinematic illustration of glowing cobalt crystal"></div>
+          <div class="cinema-title">Congo’s Minerals<br><small>cobalt light underground</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">Co</div><div class="artifact-label">Minerals and the modern world</div></div></div>
+        <article class="plaque">
+          <span class="date">2000s–Today</span>
+          <h2>Minerals, Technology, and Global Demand</h2>
+          <p>The DRC contains major deposits of cobalt, copper, coltan, diamonds, gold, and other minerals. These resources connect Congo to smartphones, electric vehicles, batteries, global supply chains, and foreign investment.</p>
+          <p>But mineral wealth has also raised serious questions about labor, corruption, environmental damage, armed groups, and who actually benefits from Congo’s resources.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Cobalt and supply chains</span></div><div class="clip-screen youtube-panel" data-youtube="LJjH4EQcayk" data-title="Deadly cost of cobalt for smartphones"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=LJjH4EQcayk" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Cobalt</span><span>Copper</span><span>Coltan</span><span>Global tech</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="era" data-nav="Today">
+      <div class="section-cinema scene-today" aria-hidden="true">
+        <div class="cinema-stage">
+          <div class="cinema-asset-wrap"><img class="cinema-asset" src="assets/congo-modern-kinshasa.png" alt="Cinematic illustration of modern Kinshasa skyline"></div>
+          <div class="cinema-title">Modern Congo<br><small>Kinshasa lights rise</small></div>
+        </div>
+      </div>
+      <div class="exhibit">
+        <div class="artifact-wrap"><div class="artifact"><div class="artifact-symbol">DRC</div><div class="artifact-label">Resilience and unfinished futures</div></div></div>
+        <article class="plaque">
+          <span class="date">Today</span>
+          <h2>A Nation Still Becoming</h2>
+          <p>The Democratic Republic of the Congo remains one of Africa’s largest, youngest, most resource-rich, and culturally influential countries. Its modern story includes elections, peacebuilding efforts, continued conflict in the east, activism, diaspora voices, environmental debates, and a rising generation imagining new futures.</p>
+          <p>The final lesson of this museum is not that Congo is only tragedy. It is that Congo’s people have continued to create life, culture, politics, and hope under extraordinary pressure.</p>
+          <div class="clip"><div class="clip-header"><span>Mini Exhibit Clip</span><span>Modern DRC</span></div><div class="clip-screen youtube-panel" data-youtube="OJjjMi3vQYw" data-title="Artists for Congolese Sovereignty"><div class="play-orb">▶</div><a class="yt-fallback" href="https://www.youtube.com/watch?v=OJjjMi3vQYw" target="_blank" rel="noopener">Watch on YouTube</a></div></div></div>
+          <div class="micro"><span>Kinshasa</span><span>Youth</span><span>Diaspora</span><span>Future</span></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <section class="finale">
+    <div class="finale-card">
+      <div class="eyebrow">End of the corridor</div>
+      <h2>The story continues.</h2>
+      <p>Congo’s history is not only a record of violence and extraction. It is also a history of survival, creativity, identity, resistance, and people who continue to imagine a future beyond the museum walls.</p>
+    </div>
+  </section>
+
+  <div class="focus-overlay" id="focusOverlay" role="dialog" aria-modal="true" aria-label="Focused exhibit">
+    <div class="focus-card">
+      <div class="focus-top">
+        <div><div class="eyebrow" id="focusDate">Exhibit</div><h2 id="focusTitle">Title</h2></div>
+        <button class="close-focus" id="closeFocus" type="button" aria-label="Close">×</button>
+      </div>
+      <div id="focusBody"></div>
+      <div class="source-note">Museum mode: click an artifact or clip to pause the walk and focus on that historical room.</div>
+    </div>
+  </div>
+
+  <div class="map-overlay" id="mapOverlay" role="dialog" aria-modal="true" aria-label="Congo map overview">
+    <div class="map-card">
+      <div class="map-top">
+        <div><div class="eyebrow">Spatial guide</div><h2>Congo as a historical crossroads</h2></div>
+        <button class="close-map" id="closeMap" type="button" aria-label="Close">×</button>
+      </div>
+      <p>This simplified overlay is a presentation-friendly guide.</p>
+      <div class="map-visual image-map">
+        <div class="map-title-mark">DRC</div>
+        <img class="congo-map-img" src="assets/congo-map.png" alt="Political and physical map of the Democratic Republic of the Congo with provinces, rivers, lakes, and major cities">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const progress = document.getElementById("progress");
+    const museum = document.getElementById("museum");
+    const floor = document.getElementById("floor");
+    const lights = document.getElementById("lights");
+    const backGlow = document.getElementById("backGlow");
+    const heroInner = document.getElementById("heroInner");
+    const eras = [...document.querySelectorAll(".era")];
+    const hud = document.getElementById("timelineHud");
+    const particles = document.getElementById("particles");
+    const focusOverlay = document.getElementById("focusOverlay");
+    const focusTitle = document.getElementById("focusTitle");
+    const focusDate = document.getElementById("focusDate");
+    const focusBody = document.getElementById("focusBody");
+    const closeFocus = document.getElementById("closeFocus");
+    const soundToggle = document.getElementById("soundToggle");
+    const mapToggle = document.getElementById("mapToggle");
+    const mapOverlay = document.getElementById("mapOverlay");
+    const closeMap = document.getElementById("closeMap");
+
+    let smoothScroll = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+    let activeIndex = 0;
+    let previousActiveIndex = -1;
+    const wasVisible = new WeakMap();
+    let lastScrollY = window.scrollY;
+    let scrollVelocity = 0;
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function createParticles() {
+      const count = window.innerWidth < 800 ? 34 : 66;
+      particles.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("span");
+        p.className = "particle";
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.top = `${Math.random() * 100}%`;
+        p.style.setProperty("--s", (0.45 + Math.random() * 1.45).toFixed(2));
+        p.style.setProperty("--o", (0.16 + Math.random() * 0.42).toFixed(2));
+        p.style.setProperty("--d", `${7 + Math.random() * 9}s`);
+        particles.appendChild(p);
+      }
+    }
+
+    function buildHud() {
+      eras.forEach((era, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = era.dataset.nav || `Era ${index + 1}`;
+        btn.addEventListener("click", () => {
+          softClick();
+          era.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+        hud.appendChild(btn);
+      });
+    }
+
+    function updateMuseum() {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const target = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      scrollVelocity += ((scrollTop - lastScrollY) - scrollVelocity) * 0.14;
+      lastScrollY = scrollTop;
+      smoothScroll += (target - smoothScroll) * 0.075;
+
+      progress.style.width = `${target * 100}%`;
+
+      const speed = clamp(Math.abs(scrollVelocity) / 38, 0, 1);
+      const floorShift = smoothScroll * 980;
+      floor.style.setProperty("--floor-x", `${floorShift}px`);
+      floor.style.setProperty("--floor-y", `${floorShift * 1.34}px`);
+      lights.style.setProperty("--light-y", `${smoothScroll * 1320}px`);
+      lights.style.setProperty("--light-intensity", `${0.34 + speed * 0.14}`);
+      backGlow.style.setProperty("--glow-y", `${Math.sin(smoothScroll * Math.PI * 2) * 16}px`);
+      backGlow.style.setProperty("--glow-alpha", `${0.2 + speed * 0.08}`);
+      museum.style.setProperty("--museum-sat", `${1 + speed * 0.08}`);
+      museum.style.setProperty("--museum-bright", `${1 + speed * 0.04}`);
+
+      const sway = Math.sin(smoothScroll * Math.PI * 20) * (0.45 + speed * 0.55);
+      museum.style.transform = `translateX(${sway}px) rotateZ(${sway * 0.012}deg)`;
+
+      particles.style.transform = `translate3d(${pointerX * -12}px, ${pointerY * -10 + smoothScroll * -48}px, 0)`;
+
+      const heroFade = clamp(1 - scrollTop / 650, 0, 1);
+      heroInner.style.setProperty("--hero-opacity", heroFade);
+      heroInner.style.setProperty("--hero-y", `${scrollTop * -0.16}px`);
+      heroInner.style.setProperty("--hero-scale", 1 + scrollTop / 9000);
+
+      eras.forEach((era, index) => {
+        const rect = era.getBoundingClientRect();
+        const active = rect.top < window.innerHeight * 0.62 && rect.bottom > window.innerHeight * 0.18;
+        const previouslyVisible = wasVisible.get(era) || false;
+        era.classList.toggle("visible", active);
+        if (active && !previouslyVisible) restartCinemaAnimation(era);
+        wasVisible.set(era, active);
+        if (active) activeIndex = index;
+
+        const localProgress = clamp((window.innerHeight - rect.top) / (window.innerHeight + rect.height), 0, 1);
+        const spin = (localProgress - 0.5) * 29 + pointerX * 2.2 + speed * 1.2;
+        const tilt = Math.sin(localProgress * Math.PI) * 6 - pointerY * 1.5;
+        const float = Math.sin(localProgress * Math.PI * 2) * 8;
+        const symbolSpin = localProgress * 18 * (index % 2 === 0 ? 1 : -1);
+        const plaqueY = (0.5 - localProgress) * 21;
+        const shine = -60 + localProgress * 116;
+        const clipShine = -130 + localProgress * 230;
+
+        const artifact = era.querySelector(".artifact");
+        const symbol = era.querySelector(".artifact-symbol");
+        const plaque = era.querySelector(".plaque");
+        const clip = era.querySelector(".clip-screen");
+
+        if (artifact) {
+          artifact.style.setProperty("--spin", `${spin}deg`);
+          artifact.style.setProperty("--tilt", `${tilt}deg`);
+          artifact.style.setProperty("--float", `${float}px`);
+          artifact.style.setProperty("--shine", `${shine}%`);
+        }
+        if (symbol) symbol.style.setProperty("--symbol-spin", `${symbolSpin}deg`);
+        if (plaque) plaque.style.setProperty("--plaque-y", `${plaqueY}px`);
+        if (clip) clip.style.setProperty("--clip-shine", `${clipShine}%`);
+      });
+
+      if (activeIndex !== previousActiveIndex) {
+        previousActiveIndex = activeIndex;
+        sectionPing();
+      }
+
+      [...hud.querySelectorAll("button")].forEach((btn, i) => btn.classList.toggle("active", i === activeIndex));
+      requestAnimationFrame(updateMuseum);
+    }
+
+    function restartCinemaAnimation(era) {
+      const animated = era.querySelectorAll(".section-cinema, .cinema-asset-wrap, .cinema-asset, .cinema-title");
+      animated.forEach(el => {
+        el.style.animation = "none";
+        el.offsetHeight;
+        el.style.animation = "";
+      });
+    }
+
+    function openFocusFromEra(era) {
+      softClick();
+      const title = era.querySelector("h2")?.textContent || "Exhibit";
+      const date = era.querySelector(".date")?.textContent || "Museum exhibit";
+      const paragraphs = [...era.querySelectorAll(".plaque p")].map(p => `<p>${p.innerHTML}</p>`).join("");
+      const clip = era.querySelector(".clip")?.outerHTML || "";
+      const tags = era.querySelector(".micro")?.outerHTML || "";
+      focusTitle.textContent = title;
+      focusDate.textContent = date;
+      focusBody.innerHTML = paragraphs + clip + tags;
+      prepareYouTubePanels(focusBody);
+      focusOverlay.classList.add("open");
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      pointerX = (e.clientX / window.innerWidth - 0.5) * 2;
+      pointerY = (e.clientY / window.innerHeight - 0.5) * 2;
+      document.body.style.setProperty("--mouse-x", `${e.clientX}px`);
+      document.body.style.setProperty("--mouse-y", `${e.clientY}px`);
+    });
+
+    document.querySelectorAll(".artifact").forEach(el => {
+      el.addEventListener("click", () => {
+        const era = el.closest(".era");
+        if (era) openFocusFromEra(era);
+      });
+    });
+
+    function prepareYouTubePanels(root = document) {
+      root.querySelectorAll(".youtube-panel").forEach(panel => {
+        const id = panel.dataset.youtube;
+        if (!id) return;
+        panel.style.setProperty("--thumb", `url(https://img.youtube.com/vi/${id}/hqdefault.jpg)`);
+      });
+    }
+
+    document.addEventListener("click", (e) => {
+      const panel = e.target.closest(".youtube-panel");
+      if (!panel) return;
+      const id = panel.dataset.youtube;
+      if (!id) return;
+      softClick();
+      window.open(`https://www.youtube.com/watch?v=${id}`, "_blank", "noopener,noreferrer");
+    });
+
+    closeFocus.addEventListener("click", () => { softClick(); focusOverlay.classList.remove("open"); });
+    focusOverlay.addEventListener("click", (e) => {
+      if (e.target === focusOverlay) focusOverlay.classList.remove("open");
+    });
+
+    mapToggle.addEventListener("click", () => { softClick(); mapOverlay.classList.add("open"); });
+    closeMap.addEventListener("click", () => { softClick(); mapOverlay.classList.remove("open"); });
+    mapOverlay.addEventListener("click", (e) => {
+      if (e.target === mapOverlay) mapOverlay.classList.remove("open");
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        focusOverlay.classList.remove("open");
+        mapOverlay.classList.remove("open");
+      }
+    });
+
+    let audioCtx;
+    let ambientOn = false;
+    let drone;
+    let droneGain;
+    let lfo;
+    let lfoGain;
+    let clickGain;
+
+    function ensureAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      drone = audioCtx.createOscillator();
+      droneGain = audioCtx.createGain();
+      lfo = audioCtx.createOscillator();
+      lfoGain = audioCtx.createGain();
+      clickGain = audioCtx.createGain();
+
+      drone.type = "sine";
+      drone.frequency.value = 58;
+      droneGain.gain.value = 0;
+      lfo.type = "sine";
+      lfo.frequency.value = 0.1;
+      lfoGain.gain.value = 8;
+      clickGain.gain.value = 0.055;
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(drone.frequency);
+      drone.connect(droneGain);
+      droneGain.connect(audioCtx.destination);
+      clickGain.connect(audioCtx.destination);
+      drone.start();
+      lfo.start();
+    }
+
+    function softClick() {
+      if (!ambientOn || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.032, audioCtx.currentTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.11);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    }
+
+    function sectionPing() {
+      if (!ambientOn || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(220 + activeIndex * 14, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.018, audioCtx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.32);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.35);
+    }
+
+    soundToggle.addEventListener("click", async () => {
+      ambientOn = !ambientOn;
+      ensureAudio();
+      if (audioCtx.state === "suspended") await audioCtx.resume();
+      if (ambientOn) {
+        droneGain.gain.setTargetAtTime(0.027, audioCtx.currentTime, 0.05);
+        soundToggle.textContent = "Ambient: On";
+        softClick();
+      } else {
+        droneGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+        soundToggle.textContent = "Ambient: Off";
+      }
+    });
+
+    window.addEventListener("resize", createParticles);
+    createParticles();
+    buildHud();
+    prepareYouTubePanels();
+    requestAnimationFrame(updateMuseum);
+  </script>
+</body>
+</html>
